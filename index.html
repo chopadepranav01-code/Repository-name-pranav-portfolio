@@ -28,12 +28,38 @@ body{background:var(--bg);color:var(--white);font-family:var(--body);overflow-x:
 ::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;justify-content:center;padding:0 32px}
+@media(min-width:769px){
+  nav{align-items:center;}
+  /* Keep logo fixed left, Contact fixed right, and center the nav links between them */
+nav{
+    display: flex;
+    align-items: center;
+}
+  nav > div.nav-links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 0 auto;
+}
+  nav > button.nav-cta{margin-left:auto;}
+
+  /* Use flexbox with equal side space */
+  nav{justify-content:space-between;}
+  nav > a.logo,
+  nav > div.nav-links,
+  nav > button.nav-cta{max-width:1200px}
+}
+
+
+
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo-bar{width:4px;height:28px;background:var(--orange)}
 .logo-text{font-family:var(--mono);font-weight:700;font-size:15px;color:var(--white);letter-spacing:0.05em}
 .nav-links{display:flex;gap:28px}
 .nav-links a{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--w60);text-decoration:none;transition:color 0.2s;cursor:pointer}
+.hamburger-menu, .mobile-menu, .mobile-menu-overlay {display:none}
 .nav-links a:hover,.nav-links a.active{color:var(--orange)}
 .nav-cta{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;padding:8px 18px;border:1px solid var(--orange);color:var(--orange);background:transparent;cursor:pointer;transition:all 0.2s}
 .nav-cta:hover{background:var(--orange);color:var(--white)}
@@ -45,8 +71,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.9
 
 /* ── HOME ── */
 #home{background:var(--bg)}
-.hero{max-width:1200px;margin:0 auto;padding:60px 32px 40px;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,76,0,0.1);border:1px solid rgba(255,76,0,0.25);padding:6px 14px;border-radius:40px;margin-bottom:20px}
+.hero{max-width:1200px;margin:0 auto;padding:60px 32px 40px;display:grid;grid-template-columns:1fr 420px;grid-template-areas:"intro photo" "details photo";gap:60px;align-items:center}
+.hero-intro{grid-area:intro;display:flex;flex-direction:column;gap:16px}
+.hero-details{grid-area:details;display:flex;flex-direction:column;gap:18px}
+.hero-photo{grid-area:photo;justify-self:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,76,0,0.1);border:1px solid rgba(255,76,0,0.25);padding:6px 14px;border-radius:40px;margin-bottom:0}
 .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,76,0,0.5)}50%{box-shadow:0 0 0 5px rgba(255,76,0,0)}}
 .badge-text{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.18em;color:var(--w80)}
@@ -62,6 +91,43 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.9
 .btn-primary:hover{background:var(--orange2);transform:scale(1.02)}
 .btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:var(--w05);border:1px solid var(--w20);color:var(--white);font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;transition:all 0.2s}
 .btn-ghost:hover{background:var(--w10);border-color:var(--w40)}
+
+/* Resume button highlight effect */
+.resume-btn{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(45deg, transparent 30%, var(--orange) 50%, transparent 70%);
+    background-size:200% 100%;
+    background-position:-100%;
+    transition:all 0.4s ease;
+}
+.resume-btn:hover{
+    background-position:100%;
+    color:var(--white);
+    border-color:var(--orange);
+    box-shadow:0 0 15px rgba(255,76,0,0.5);
+}
+.resume-btn::after{
+    content:'';
+    position:absolute;
+    top:-50%;
+    left:-50%;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle,rgba(255,76,0,0.1) 0%,transparent 70%);
+    transform:rotate(30deg);
+    transition:all 0.6s ease;
+    opacity:0;
+}
+.resume-btn:hover::after{
+    opacity:1;
+    animation:pulse 2s infinite;
+}
+@keyframes pulse{
+    0%{transform:rotate(30deg) scale(0.8);opacity:0.6}
+    50%{transform:rotate(30deg) scale(1.2);opacity:0.3}
+    100%{transform:rotate(30deg) scale(0.8);opacity:0.6}
+}
 .hero-location{padding-top:20px;border-top:1px solid var(--w10)}
 .location-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.3em;color:var(--w40);margin-bottom:4px}
 .location-val{font-family:var(--display);font-size:26px;font-weight:700;font-style:italic;color:var(--white)}
@@ -81,11 +147,37 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.9
 .corner.br{bottom:4px;right:4px;border-bottom:2px solid var(--orange);border-right:2px solid var(--orange)}
 
 /* STATS */
-.stats-bar{max-width:1200px;margin:0 auto;padding:0 32px 0;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--w10);border-bottom:1px solid var(--w10)}
-.stat-item{padding:24px 20px;border-right:1px solid var(--w10);text-align:center}
+.stats-bar{max-width:1200px;margin:0 auto;padding:0 32px 0;display:flex;gap:0;justify-content:center;align-items:stretch}
+  @media(min-width:901px){
+    .stats-bar{max-width:1200px;padding:0 32px 0}
+    .stats-bar .stat-item{flex:1 1 0;}
+  }
+
+/* Desktop stat boxes: premium dark cards (mobile rules remain unchanged below) */
+.stat-item{padding:24px 20px;border-right:1px solid var(--w10);text-align:center;transition:transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease}
 .stat-item:last-child{border-right:none}
 .stat-num{font-family:var(--display);font-size:40px;font-weight:900;font-style:italic;color:var(--white)}
 .stat-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:var(--w40);margin-top:2px}
+/* Premium contrast accents (desktop only) */
+@media(min-width:901px){
+  .stat-item{min-height:124px;background:rgba(255,76,0,0.04);border-right:1px solid rgba(255,255,255,0.08);border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,0.24);position:relative;overflow:hidden}
+  .stat-item::before{content:'';position:absolute;inset:0;border-radius:12px;background:radial-gradient(circle at 30% 20%, rgba(255,76,0,0.14), transparent 62%);opacity:0;transition:opacity 0.22s ease;pointer-events:none}
+  .stat-item:hover::before{opacity:1}
+  /* soften existing hover so it layers nicely over premium box */
+  .stat-item:hover{border-color:rgba(255,76,0,0.25);background:rgba(255,76,0,0.08);box-shadow:0 10px 40px rgba(0,0,0,0.28);transform:translateY(-2px)}
+}
+
+
+
+/* Make stat cards subtly interactive without changing layout */
+.stat-item{cursor:pointer;user-select:none}
+.stat-item:hover{border-color:rgba(255,76,0,0.35);background:rgba(255,76,0,0.06);transform:translateY(-2px);box-shadow:0 10px 40px rgba(0,0,0,0.25)}
+.stat-item:active{transform:translateY(-1px) scale(0.99)}
+.stat-item:focus-visible{outline:2px solid rgba(255,76,0,0.75);outline-offset:4px}
+
+/* Vice-captain highlight when navigated from stats */
+#vice-captain-exp .tl-card.stat-focus{box-shadow:0 0 0 2px rgba(255,76,0,0.55), 0 18px 60px rgba(255,76,0,0.14);border-color:rgba(255,76,0,0.55);transform:translateY(-2px) !important}
+
 
 /* ABOUT */
   .about-section{max-width:1200px;margin:0 auto;padding:70px 32px;display:grid;grid-template-columns:300px 1fr;gap:40px}
@@ -269,6 +361,94 @@ main{position:relative;z-index:1}
   .about-section{grid-template-columns:1fr}
   .hero-name{font-size:64px}
 }
+
+/* Mobile overflow guard (small screens only; desktop unchanged) */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;max-width:100%}
+  *,*::before,*::after{box-sizing:border-box;max-width:100%}
+  img{max-width:100%;height:auto}
+
+  /* Stats: force exact 2-column grid on mobile to prevent horizontal overflow */
+  .stats-bar{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    justify-content:center;
+    gap:16px;
+    padding:40px 16px;
+    max-width:100%;
+  }
+}
+
+
+@media(min-width:769px){
+  nav{justify-content:center}
+  .nav-cta{margin-left:auto; margin: right 0;}
+}
+
+
+
+@media(max-width:768px){
+  .nav-links{display:none !important}
+  .nav-cta{display:none !important}
+  .hamburger-menu{display:flex}
+
+  nav{padding:0 16px;justify-content:space-between;align-items:center}
+  nav .logo{margin-right:auto}
+  .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);opacity:0;visibility:hidden;transition:opacity 0.3s ease, visibility 0.3s ease;z-index:99}
+
+  .mobile-menu-overlay.active{opacity:1;visibility:visible}
+
+  .mobile-menu{position:fixed;top:0;left:-100%;width:100%;height:100vh;background:var(--bg);z-index:100;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow:hidden}
+  .mobile-menu.active{left:0}
+  .mobile-menu[aria-hidden="false"]{left:0}
+
+  .mobile-menu-content{padding:90px 20px 20px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;flex:1}
+
+  .mobile-menu-item{font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:0.12em;color:var(--w60);background:transparent;border:none;text-align:left;padding:18px 16px;cursor:pointer;outline:none;transition:color 0.25s ease, background 0.25s ease;}
+  .mobile-menu-item:hover{color:var(--orange);background:rgba(255,76,0,0.06)}
+
+  .mobile-menu-cta{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:0.1em;padding:14px 16px;border:1px solid var(--orange);color:var(--orange);background:transparent;cursor:pointer;transition:all 0.2s ease;margin:20px 16px 0;width:calc(100% - 32px);}
+  .mobile-menu-cta:hover{background:var(--orange);color:var(--white)}
+
+  .hamburger-menu{display:flex;flex-direction:column;justify-content:center;align-items:center;width:42px;height:42px;background:transparent;border:none;cursor:pointer;position:relative;z-index:101;padding:0;gap:5px}
+  .hamburger-line{width:24px;height:2px;background:var(--white);border-radius:1px;transition:transform 0.3s ease, opacity 0.3s ease}
+  .hamburger-menu.active .hamburger-line:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
+  .hamburger-menu.active .hamburger-line:nth-child(2){opacity:0}
+  .hamburger-menu.active .hamburger-line:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
+
+  .hero{display:flex;flex-direction:column;align-items:center;padding:60px 16px 40px;gap:24px}
+  .hero-intro{width:100%;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+  .hero-details{width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;order:2;gap:18px}
+  .hero-photo{order:1;width:100%;display:flex;justify-content:center}
+  .hero-name{font-size:48px;line-height:0.88}
+  .hero-tagline{font-size:14px;max-width:560px}
+  .hero-btns{flex-direction:column;gap:10px;width:100%}
+  .hero-btns button{width:100%;justify-content:center}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center}
+
+  .stats-bar{grid-template-columns:repeat(2,1fr);gap:16px;border:none;padding:0;background:transparent;max-width:100%;margin:0 auto;padding:40px 16px}
+  .stat-item{border:none;border-right:none;border-top:none !important;background:rgba(255,76,0,0.08);border:1px solid rgba(255,76,0,0.15);border-radius:12px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;position:relative;transition:all 0.3s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+  .stat-item::before{content:'';position:absolute;inset:0;border-radius:12px;background:radial-gradient(circle at 30% 20%, rgba(255,76,0,0.1), transparent 70%);pointer-events:none;opacity:0}
+  .stat-item:hover{border-color:rgba(255,76,0,0.3);background:rgba(255,76,0,0.12);box-shadow:0 6px 30px rgba(255,76,0,0.15)}
+  .stat-item:hover::before{opacity:1}
+  .stat-num{font-size:52px;margin-bottom:12px;font-weight:900;letter-spacing:-0.02em}
+  .stat-label{font-size:11px;color:var(--w50,rgba(255,255,255,0.5));line-height:1.4}
+
+  .section{padding:50px 16px}
+  .sec-title{font-size:40px}
+  .about-section{padding:50px 16px;gap:24px}
+  .about-heading{font-size:36px}
+
+  .skills-grid{grid-template-columns:1fr;gap:12px}
+  .skills-grid-core{grid-template-columns:1fr;gap:16px}
+
+  .research-findings{grid-template-columns:1fr;gap:12px}
+  .method-steps{grid-template-columns:1fr;gap:0}
+  .method-step:not(:last-child)::after{content:'↓';right:auto;bottom:-16px;top:auto;transform:translateX(0)}
+
+  .contact-heading{font-size:40px}
+  .footer-inner{flex-direction:column;gap:12px}
+}
 </style>
 </head>
 <body>
@@ -288,7 +468,24 @@ main{position:relative;z-index:1}
     <a onclick="showPage('research')" id="nav-research">Research</a>
   </div>
   <button class="nav-cta" onclick="showPage('contact')">Contact</button>
+  <button class="hamburger-menu" id="hamburgerBtn" aria-label="Toggle mobile menu" aria-expanded="false" type="button">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
 </nav>
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" tabindex="-1"></div>
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-item" onclick="showPage('home'); closeMobileMenu()">About</button>
+    <button class="mobile-menu-item" onclick="showPage('experience'); closeMobileMenu()">Experience</button>
+    <button class="mobile-menu-item" onclick="showPage('education'); closeMobileMenu()">Education</button>
+    <button class="mobile-menu-item" onclick="showPage('projects'); closeMobileMenu()">Projects</button>
+    <button class="mobile-menu-item" onclick="showPage('skills'); closeMobileMenu()">Skills</button>
+    <button class="mobile-menu-item" onclick="showPage('research'); closeMobileMenu()">Publications</button>
+    <button class="mobile-menu-cta" onclick="showPage('contact'); closeMobileMenu()">Contact</button>
+  </div>
+</div>
 
 <main>
 
@@ -298,18 +495,9 @@ main{position:relative;z-index:1}
     <div class="orange-glow" style="width:600px;height:500px;top:-100px;right:-100px"></div>
     <div class="orange-glow" style="width:400px;height:400px;top:50%;left:-80px;opacity:0.5"></div>
     <div class="hero">
-      <div>
+      <div class="hero-intro">
         <div class="hero-badge"><span class="badge-dot"></span><span class="badge-text">Available · Graduating June 2026</span></div>
         <div class="hero-name">PRANAV<br>SUNIL<br><span class="surname">CHOPADE</span></div>
-        <p class="hero-tagline">Mechanical Engineering student passionate about automotive systems, CAD design, and drivetrain development. Focused on building practical engineering solutions through design, fabrication, and innovation.</p>
-        <div class="hero-btns">
-          <button class="btn-primary" onclick="showPage('projects')">View Projects →</button>
-          <button class="btn-ghost" onclick="showPage('contact')">Contact Me</button>
-        </div>
-        <div class="hero-location">
-          <div class="location-label">Location</div>
-          <div class="location-val">Pune, India</div>
-        </div>
       </div>
       <div class="hero-photo">
         <div class="photo-glow"></div>
@@ -318,14 +506,37 @@ main{position:relative;z-index:1}
           <img src="./Assets/homepage photo.jpeg" alt="Pranav Chopade" />
         </div>
       </div>
+      <div class="hero-details">
+        <p class="hero-tagline">Mechanical Engineering student passionate about automotive systems, CAD design, and drivetrain development. Focused on building practical engineering solutions through design, fabrication, and innovation.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('projects')">View Projects →</button>
+          <button class="btn-ghost resume-btn" onclick="window.open('./Assets/Pranav Chopade Resume.pdf', '_blank')">RESUME</button>
+        </div>
+        <div class="hero-location">
+          <div class="location-label">Location</div>
+          <div class="location-val">Pune, India</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="stats-bar">
-    <div class="stat-item"><div class="stat-num">2+</div><div class="stat-label">Formula Student Seasons</div></div>
-    <div class="stat-item"><div class="stat-num">3+</div><div class="stat-label">College Projects</div></div>
-    <div class="stat-item"><div class="stat-num">2+</div><div class="stat-label">Freelance Projects</div></div>
-    <div class="stat-item"><div class="stat-num">1</div><div class="stat-label">RESEARCH PAPER</div></div>
+    <div class="stat-item" role="button" tabindex="0" onclick="navigateToExperience()" onkeypress="if(event.key==='Enter') navigateToExperience()" style="cursor:pointer">
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Formula Student Seasons</div>
+    </div>
+    <div class="stat-item" role="button" tabindex="0" onclick="navigateToCollegeProject()" onkeypress="if(event.key==='Enter') navigateToCollegeProject()" style="cursor:pointer">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">College Projects</div>
+    </div>
+    <div class="stat-item" role="button" tabindex="0" onclick="navigateToFreelanceProject()" onkeypress="if(event.key==='Enter') navigateToFreelanceProject()" style="cursor:pointer">
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Freelance Projects</div>
+    </div>
+    <div class="stat-item" role="button" tabindex="0" onclick="navigateToResearch()" onkeypress="if(event.key==='Enter') navigateToResearch()" style="cursor:pointer">
+      <div class="stat-num">1</div>
+      <div class="stat-label">RESEARCH PAPER</div>
+    </div>
   </div>
 
   <div class="about-section">
@@ -355,7 +566,7 @@ main{position:relative;z-index:1}
     </div>
 
     <div class="timeline">
-      <div class="tl-item" data-reveal>
+      <div class="tl-item" id="vice-captain-exp" data-reveal>
         <div class="tl-dot" aria-hidden="true"></div>
         <div class="tl-card">
           <div class="tl-date">2024 – 2026</div>
@@ -467,7 +678,7 @@ main{position:relative;z-index:1}
 
     <div class="proj-grid" id="proj-grid">
 
-      <div class="proj-card featured" data-cat="college" data-featured="true" data-reveal>
+      <div class="proj-card featured" id="first-college-proj" data-cat="college" data-featured="true" data-reveal>
 
         <div class="proj-cat">FINAL YEAR PROJECT</div>
         <div class="proj-title">CUSTOM LIMITED SLIP DIFFERENTIAL - DESIGN &amp; TESTING</div>
@@ -508,9 +719,7 @@ main{position:relative;z-index:1}
         </ul>
       </div>
 
-      <div class="proj-card" data-cat="freelance" data-reveal>
-<div class="proj-cat">FREELANCE PROJECT</div>
-        <div class="proj-title">PIPE MASTER 360</div>
+      <div class="proj-card" id="first-freelance-proj" data-cat="freelance" data-reveal>
 
 
         <div class="proj-date">03/2025 – 04/2025</div>
@@ -701,14 +910,14 @@ main{position:relative;z-index:1}
 // EmailJS configuration (Developer only)
 // Keep empty strings unless you intentionally configure EmailJS.
 const EMAILJS_CONFIG = {
-  SERVICE_ID: "",
-  TEMPLATE_ID: "",
-  PUBLIC_KEY: "",
+  SERVICE_ID: "service_pxadsse",
+  TEMPLATE_ID: "template_4xgjbr7",
+  PUBLIC_KEY: "dxPdPlWasdd1z8DeW",
   TARGET_EMAIL: "chopadepranav01@gmail.com"
 };
 
-function isEmailJsConfigured(cfg){
-  if(!cfg) return false;
+function isEmailJsConfigured(cfg) {
+  if (!cfg) return false;
   return !!(
     cfg.SERVICE_ID &&
     cfg.TEMPLATE_ID &&
@@ -723,6 +932,7 @@ function isEmailJsConfigured(cfg){
 if (isEmailJsConfigured(EMAILJS_CONFIG)) {
   try {
     emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    console.log('[contact] EmailJS initialized successfully');
   } catch (e) {
     console.error('EmailJS init error:', e);
   }
@@ -746,6 +956,154 @@ function showPage(id){
   if(nl)nl.classList.add('active');
 
   window.scrollTo({top:0, behavior:'auto'});
+}
+
+function toggleMobileMenu(){
+  const hamburger = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  if(!hamburger || !mobileMenu || !overlay) return;
+
+  const isOpen = mobileMenu.classList.toggle('active');
+  hamburger.classList.toggle('active', isOpen);
+  overlay.classList.toggle('active', isOpen);
+  mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+  hamburger.setAttribute('aria-expanded', String(isOpen));
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileMenu(){
+  const hamburger = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  if(!hamburger || !mobileMenu || !overlay) return;
+
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('active');
+  overlay.classList.remove('active');
+  mobileMenu.setAttribute('aria-hidden', 'true');
+  hamburger.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+(function(){
+  const hamburger = document.getElementById('hamburgerBtn');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  if(hamburger) hamburger.addEventListener('click', toggleMobileMenu);
+  if(overlay) overlay.addEventListener('click', closeMobileMenu);
+  window.addEventListener('resize', ()=>{ if(window.innerWidth > 768) closeMobileMenu(); });
+})();
+
+/* Stats Navigation Functions */
+function navigateToExperience(){
+  showPage('experience');
+  setTimeout(()=>{
+    const targetItem = document.getElementById('vice-captain-exp');
+    const targetCard = targetItem?.querySelector('.tl-card') || targetItem;
+    if(!targetItem || !targetCard) return;
+
+    // Scroll to Experience section and bring Vice Captain into view
+    targetItem.scrollIntoView({behavior:'smooth',block:'start'});
+
+    // Smoothly highlight/focus Vice Captain entry
+    targetCard.classList.add('stat-focus');
+
+    const prevTabIndex = targetCard.getAttribute('tabindex');
+    if(prevTabIndex === null) targetCard.setAttribute('tabindex','-1');
+
+    requestAnimationFrame(()=>{
+      try { targetCard.focus({preventScroll:true}); } catch(e) {}
+    });
+
+    setTimeout(()=>{
+      targetCard.classList.remove('stat-focus');
+      const curTabIndex = targetCard.getAttribute('tabindex');
+      if(prevTabIndex === null && curTabIndex === '-1') targetCard.removeAttribute('tabindex');
+    }, 1600);
+  }, 250);
+}
+
+
+function navigateToCollegeProject(){
+  showPage('projects');
+  setTimeout(()=>{
+    const grid = document.getElementById('proj-grid');
+    const target = document.getElementById('first-college-proj');
+    const tabs = document.querySelectorAll('.proj-filters .filter-btn');
+    const collegeTab = Array.from(tabs).find(b => (b.textContent || '').trim() === 'COLLEGE');
+
+    // Activate tab + apply filtering (handles showing only college cards)
+    if(collegeTab) filterProjects('college', collegeTab);
+    else filterProjects('college', tabs[1]);
+
+    if(!target) return;
+
+    // Smooth scroll to Projects section/card
+    const scrollTarget = grid || target;
+    scrollTarget.scrollIntoView({behavior:'smooth',block:'start'});
+
+    // Subtle non-layout-shifting click feedback
+    const prevOutline = target.style.outline;
+    const prevOutlineOffset = target.style.outlineOffset;
+    target.style.outline = '2px solid rgba(255,76,0,0.75)';
+    target.style.outlineOffset = '6px';
+
+    setTimeout(()=>{
+      target.style.outline = prevOutline;
+      target.style.outlineOffset = prevOutlineOffset;
+    }, 900);
+  }, 250);
+}
+
+function navigateToFreelanceProject(){
+  showPage('projects');
+  setTimeout(()=>{
+    const grid = document.getElementById('proj-grid');
+    const target = document.getElementById('first-freelance-proj');
+    const tabs = document.querySelectorAll('.proj-filters .filter-btn');
+    const freelanceTab = Array.from(tabs).find(b => (b.textContent || '').trim() === 'FREELANCE');
+
+    // Activate tab + apply filtering (handles showing only freelance cards)
+    if(freelanceTab) filterProjects('freelance', freelanceTab);
+    else filterProjects('freelance', tabs[2]);
+
+    if(!target) return;
+
+    // Smooth scroll to Projects section/card
+    const scrollTarget = grid || target;
+    scrollTarget.scrollIntoView({behavior:'smooth',block:'start'});
+
+    // Subtle non-layout-shifting click feedback
+    const prevOutline = target.style.outline;
+    const prevOutlineOffset = target.style.outlineOffset;
+    target.style.outline = '2px solid rgba(255,76,0,0.75)';
+    target.style.outlineOffset = '6px';
+
+    setTimeout(()=>{
+      target.style.outline = prevOutline;
+      target.style.outlineOffset = prevOutlineOffset;
+    }, 900);
+  }, 250);
+}
+
+function navigateToResearch(){
+  showPage('research');
+  setTimeout(()=>{
+    const target = document.getElementById('research') || document.querySelector('.research-card');
+    if(!target) return;
+
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+
+    const prevOutline = target.style.outline;
+    const prevOutlineOffset = target.style.outlineOffset;
+    target.style.outline = '2px solid rgba(255,76,0,0.75)';
+    target.style.outlineOffset = '6px';
+
+    setTimeout(()=>{
+      target.style.outline = prevOutline;
+      target.style.outlineOffset = prevOutlineOffset;
+    }, 1200);
+  }, 300);
 }
 
 
@@ -780,112 +1138,112 @@ function filterProjects(cat,btn){
 
 
 async function handleContactSubmit(event){
-  event?.preventDefault?.();
+   event?.preventDefault?.();
 
-  const nameEl = document.getElementById('contactName');
-  const emailEl = document.getElementById('contactEmail');
-  const msgEl = document.getElementById('contactMessage');
-  const btnEl = document.getElementById('contactSubmit');
-  const statusEl = document.getElementById('contactStatus');
+   const nameEl = document.getElementById('contactName');
+   const emailEl = document.getElementById('contactEmail');
+   const msgEl = document.getElementById('contactMessage');
+   const btnEl = document.getElementById('contactSubmit');
+   const statusEl = document.getElementById('contactStatus');
 
-  if(!nameEl || !emailEl || !msgEl || !btnEl || !statusEl) return;
+   if(!nameEl || !emailEl || !msgEl || !btnEl || !statusEl) return;
 
-  const name = (nameEl.value || '').trim();
-  const email = (emailEl.value || '').trim();
-  const message = (msgEl.value || '').trim();
+   const name = (nameEl.value || '').trim();
+   const email = (emailEl.value || '').trim();
+   const message = (msgEl.value || '').trim();
 
-  statusEl.style.display = 'none';
-  statusEl.textContent = '';
+   statusEl.style.display = 'none';
+   statusEl.textContent = '';
 
-  const setBtnLoading = (loading)=>{
-    btnEl.disabled = !!loading;
-    btnEl.style.opacity = loading ? '0.75' : '';
-    btnEl.style.transform = loading ? 'translateY(0)' : '';
-    btnEl.style.cursor = loading ? 'not-allowed' : 'pointer';
-  };
+   const setBtnLoading = (loading)=>{
+     btnEl.disabled = !!loading;
+     btnEl.style.opacity = loading ? '0.75' : '';
+     btnEl.style.transform = loading ? 'translateY(0)' : '';
+     btnEl.style.cursor = loading ? 'not-allowed' : 'pointer';
+   };
 
-  if(!name || !email || !message){
-    statusEl.style.display = 'block';
-    statusEl.style.color = 'var(--orange)';
-    statusEl.textContent = 'Please fill all fields.';
-    return;
-  }
+   if(!name || !email || !message){
+     statusEl.style.display = 'block';
+     statusEl.style.color = 'var(--orange)';
+     statusEl.textContent = 'Please fill all fields.';
+     return;
+   }
 
-  setBtnLoading(true);
+   setBtnLoading(true);
 
-  // Local backend fallback for static deployments
-  const sendViaBackend = async ({name, email, message}) => {
-    // When testing locally by opening the HTML file directly (file://), '/api/contact' will resolve incorrectly.
-    // Use localhost URL for the Express backend.
-    const endpoint = 'http://localhost:3001/api/contact';
+   // Try EmailJS first if configured
+   if (isEmailJsConfigured(EMAILJS_CONFIG)) {
+     try {
+       await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
+         from_name: name,
+         from_email: email,
+         message: message
+       });
 
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, message })
-    });
+       alert("Message sent successfully!");
 
-    let data;
-    try { data = await res.json(); } catch { data = null; }
+       statusEl.style.display = 'block';
+       statusEl.style.color = 'rgba(255,255,255,0.8)';
+       statusEl.textContent = 'Message sent successfully.';
 
-    if(!res.ok){
-      const errMsg = data?.error || `Backend error (${res.status})`;
-      throw new Error(errMsg);
-    }
+       nameEl.value = '';
+       emailEl.value = '';
+       msgEl.value = '';
+     } catch (error) {
+       console.error('EmailJS error:', error);
+       // Fall through to backend fallback
+     } finally {
+       setBtnLoading(false);
+     }
+   }
 
-    if(!data?.ok){
-      throw new Error(data?.error || 'Backend failed to send message.');
-    }
+   // Local backend fallback for static deployments
+   const sendViaBackend = async ({name, email, message}) => {
+     // When testing locally by opening the HTML file directly (file://), '/api/contact' will resolve incorrectly.
+     // Use localhost URL for the Express backend.
+     const endpoint = 'http://localhost:3001/api/contact';
 
-    return data;
-  };
+     const res = await fetch(endpoint, {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ name, email, message })
+     });
 
-  try {
-    const serviceId = EMAILJS_CONFIG.SERVICE_ID;
-    const templateId = EMAILJS_CONFIG.TEMPLATE_ID;
-    const publicKey = EMAILJS_CONFIG.PUBLIC_KEY;
-    const targetEmail = EMAILJS_CONFIG.TARGET_EMAIL;
+     let data;
+     try { data = await res.json(); } catch { data = null; }
 
-    // Prefer EmailJS when configured; otherwise fallback to /api/contact
-    if (!isEmailJsConfigured(EMAILJS_CONFIG)) {
-      console.warn('[contact] EmailJS not configured; falling back to backend endpoint POST /api/contact');
-      await sendViaBackend({ name, email, message });
-    } else {
-      if (!emailjs || typeof emailjs.init !== 'function' || typeof emailjs.send !== 'function') {
-        throw new Error('EmailJS SDK failed to load.');
-      }
+     if(!res.ok){
+       const errMsg = data?.error || `Backend error (${res.status})`;
+       throw new Error(errMsg);
+     }
 
-      // Re-init is safe, but we only allow sending when configured
-      emailjs.init(publicKey);
+     if(!data?.ok){
+       throw new Error(data?.error || 'Backend failed to send message.');
+     }
 
-      const templateParams = {
-        from_name: name,
-        from_email: email,
-        message,
-        to_email: targetEmail
-      };
+     return data;
+   };
 
-      const response = await emailjs.send(serviceId, templateId, templateParams);
-      console.log('EmailJS response:', response);
-    }
+   try {
+     await sendViaBackend({name, email, message});
 
-    statusEl.style.display = 'block';
-    statusEl.style.color = 'rgba(255,255,255,0.8)';
-    statusEl.textContent = 'Message sent successfully.';
+     statusEl.style.display = 'block';
+     statusEl.style.color = 'rgba(255,255,255,0.8)';
+     statusEl.textContent = 'Message sent successfully.';
 
-    nameEl.value = '';
-    emailEl.value = '';
-    msgEl.value = '';
-  } catch (e) {
-    console.error('Contact send error:', e);
-    statusEl.style.display = 'block';
-    statusEl.style.color = 'var(--orange)';
-    const errText = String(e?.text || e?.message || e?.status || e?.response || e || 'Failed to send message.');
-    statusEl.textContent = errText;
-  } finally {
-    setBtnLoading(false);
-  }
-}
+     nameEl.value = '';
+     emailEl.value = '';
+     msgEl.value = '';
+   } catch (e) {
+     console.error('Contact send error:', e);
+     statusEl.style.display = 'block';
+     statusEl.style.color = 'var(--orange)';
+     const errText = String(e?.text || e?.message || e?.status || e?.response || e || 'Failed to send message.');
+     statusEl.textContent = errText;
+   } finally {
+     setBtnLoading(false);
+   }
+ }
 
 // Smooth scroll reveal for Experience cards
 (function(){
